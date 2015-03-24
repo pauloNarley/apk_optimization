@@ -9,6 +9,7 @@ zipalign="./bin/zipalign"
 
 function optimize_apk(){
 for apk in `ls *.apk | sed "s/.apk//"`; do
+    echo "Optimizing $apk.apk"
     $apktool d -s $apk.apk >/dev/null 2>&1
         for png in `find $1 | grep png`; do
 	    ./bin/pngquant $apk/$png >/dev/null 2>&1
@@ -18,6 +19,7 @@ for apk in `ls *.apk | sed "s/.apk//"`; do
     rm -rf $apk
     $signapk "$apk"-optimized.apk "$apk"-optimized-signed.apk
     $zipalign -f 4 "$apk"-optimized-signed.apk "$apk"-optimized-signed-zipaligned.apk
+    echo "$apk.apk optimized"
 done
 }
 
@@ -28,6 +30,5 @@ sleep 1;
 echo "Press enter to begin..."
 read enterkey
 sleep 1;
-echo "Optimizing..."
 optimize_apk #call optimization function
 echo "done!"

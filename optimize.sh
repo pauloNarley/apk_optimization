@@ -2,18 +2,16 @@
 # APK Optimization Tool created by luca020400 and modified by Pizza_Dox
 
 #vars
-ver="1.0"
+ver="1.1"
 apktool="java -jar bin/apktool.jar"
 signapk="java -jar bin/signapk.jar bin/testkey.x509.pem bin/testkey.pk8"
 zipalign="./bin/zipalign"
-currentdir=`dirname "$BASH_SOURCE"`
-apk_exists=0 #for init purposes
 
 function apk_check(){
-	if [ -e $currentdir/*.apk ]; then
-		apk_exists=1
-	else
-		apk_exists=0
+if [ ! -f *.apk ]; then
+    echo "There isn't any .apk to optimize"
+    exit 1
+fi
 }
 
 function optimize_apk(){
@@ -39,5 +37,6 @@ sleep 1;
 echo "Press enter to begin..."
 read
 sleep 1;
+apk_check #apk check
 optimize_apk #call optimization function
 echo "done!"

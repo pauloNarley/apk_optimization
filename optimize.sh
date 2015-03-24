@@ -7,6 +7,10 @@ apktool="java -jar bin/apktool.jar"
 signapk="java -jar bin/signapk.jar bin/testkey.x509.pem bin/testkey.pk8"
 zipalign="./bin/zipalign"
 
+function apk_check(){
+	#wip
+}
+
 function optimize_apk(){
 for apk in `ls *.apk | sed "s/.apk//"`; do
     echo "Optimizing $apk.apk"

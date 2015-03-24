@@ -6,9 +6,14 @@ ver="1.0"
 apktool="java -jar bin/apktool.jar"
 signapk="java -jar bin/signapk.jar bin/testkey.x509.pem bin/testkey.pk8"
 zipalign="./bin/zipalign"
+currentdir=`dirname "$BASH_SOURCE"`
+apk_exists=0 #for init purposes
 
 function apk_check(){
-	#wip
+	if [ -e $currentdir/*.apk ]; then
+		apk_exists=1
+	else
+		apk_exists=0
 }
 
 function optimize_apk(){

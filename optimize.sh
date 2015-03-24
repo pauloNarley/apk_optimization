@@ -28,7 +28,7 @@ echo "APK Optimizer v$ver"
 echo "by luca020400 & Pizza-Dox"
 sleep 1;
 echo "Press enter to begin..."
-read enterkey
+read
 sleep 1;
 optimize_apk #call optimization function
 echo "done!"

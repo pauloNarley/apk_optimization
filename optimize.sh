@@ -2,12 +2,13 @@
 # APK Optimization Tool created by luca020400 and modified by Pizza_Dox
 
 #vars
-ver="2.0"
+ver="2.1"
 apktool="java -jar bin/apktool.jar"
 signapk="java -jar bin/signapk.jar bin/testkey.x509.pem bin/testkey.pk8"
 zipalign="./bin/zipalign"
 opt_sign=0
 opt_zipalign=0
+opt_spec_apk=0
 
 usage()
 {
@@ -19,7 +20,7 @@ usage()
     echo "    Optimize the APKs"
     echo ""
     echo "  Options :"
-    echo "    -f Allow Specifing APK"
+    echo "    -f Allow Specifing APK/APKs"
     echo "    -s Sign the APK/APKs"
     echo "    -z Zipalign and Sign the APK/APKs"
     echo "    -h Show this help dialog"
@@ -30,13 +31,12 @@ usage()
     exit 1
 }
 
-# arg parser
 while getopts "f:hsz" opt; do
     case $opt in
-        f) specific_apk=$OPTARG ;;
-        h) usage ;;
+        f) opt_spec_apk=1 && fapks="$OPTARG" ;;
         s) opt_sign=1 ;;
         z) opt_zipalign=1 ;;
+        h|*) usage ;;
     esac
 done
 shift $((OPTIND-1))
@@ -46,14 +46,22 @@ if [ ! -e *.apk ]; then
     echo "There isn't any .apk to optimize"
     exit 1
 fi
+
+if [ $opt_spec_apk -eq 1 ]; then
+    for apk in "$fapks"; do
+        apks=$(echo -e "$apks\n$apk")
+    done
+    apks=$(echo $apks | sed "s/.apk//g")
+else
+    apks=`ls *.apk | sed "s/.apk//g"`
+fi
 }
 
 optimize_apk(){
-for apk in `ls *.apk | sed "s/.apk//"`; do
-    if [ -e $specific_apk ]; then apk=`echo $specific_apk | sed "s/.apk//"`; fi
+for apk in $apks; do
     echo "Optimizing $apk.apk"
     $apktool d -s $apk.apk >/dev/null 2>&1
-        for png in `find $1 | grep png`; do
+        for png in `find $1 | grep png | sed "s/mipmap//g"`; do
             ./bin/pngquant $apk/$png >/dev/null 2>&1
         done
     $apktool b -f $apk >/dev/null 2>&1

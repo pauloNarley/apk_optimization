@@ -9,7 +9,7 @@ zipalign="./bin/zipalign"
 opt_sign=0
 opt_zipalign=0
 
-function usage()
+usage()
 {
     echo ""
     echo "Usage :"
@@ -41,14 +41,14 @@ while getopts "f:hsz" opt; do
 done
 shift $((OPTIND-1))
 
-function apk_check(){
+apk_check(){
 if [ ! -e *.apk ]; then
     echo "There isn't any .apk to optimize"
     exit 1
 fi
 }
 
-function optimize_apk(){
+optimize_apk(){
 for apk in `ls *.apk | sed "s/.apk//"`; do
     if [ -e $specific_apk ]; then apk=`echo $specific_apk | sed "s/.apk//"`; fi
     echo "Optimizing $apk.apk"
